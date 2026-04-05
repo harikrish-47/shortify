@@ -1,0 +1,29 @@
+# Git Ignore File for Shortify Project
+
+# Backend
+backend/target/
+backend/.mvn/
+backend/*.jar
+backend/*.war
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Misc
+*.log

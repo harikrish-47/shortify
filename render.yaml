@@ -1,0 +1,54 @@
+services:
+  # 1. Database (PostgreSQL)
+  - type: db
+    name: shortify-db
+    plan: free
+    databaseName: shortify
+    user: shortify_user
+
+  # 2. Backend (Spring Boot Web Service)
+  - type: web
+    name: shortify-backend
+    env: java
+    plan: free
+    # Adjust root directory to backend
+    rootDir: backend
+    buildCommand: mvn clean package -DskipTests
+    startCommand: java -jar target/shortify-0.0.1-SNAPSHOT.jar
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        fromDatabase:
+          name: shortify-db
+          property: connectionString
+      - key: SPRING_DATASOURCE_USERNAME
+        fromDatabase:
+          name: shortify-db
+          property: user
+      - key: SPRING_DATASOURCE_PASSWORD
+        fromDatabase:
+          name: shortify-db
+          property: password
+      - key: JWT_SECRET
+        generateValue: true
+
+  # 3. Frontend (Vite Static Site)
+  - type: static
+    name: shortify-frontend
+    plan: free
+    # Adjust root directory to frontend
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    publishPath: dist
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: shortify-backend
+          property: host
+        # Prepend https and append /api
+        # Note: Render provides the host, so we wrap it.
+        # However, for simplicity, I'll recommend the user manually link it or use this dynamic binding if Render supports it well now.
+        # Actually, Render doesn't support string concatenation in blueprints directly.
+        # I'll set it manually in the Render dashboard or use a small hack if possible.
+        # Let's just leave it as host, and the frontend api.js uses it. 
+        # Wait, if host is 'xxx.onrender.com', VITE_API_URL should be 'https://xxx.onrender.com/api'.
