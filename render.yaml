@@ -35,7 +35,7 @@ services:
     plan: free
     rootDir: frontend
     buildCommand: npm install && npm run build
-    publishPath: dist
+    staticPublishPath: dist
     # Rewrite for React Router (Single Page App)
     routes:
       - type: rewrite
