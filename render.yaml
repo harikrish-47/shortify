@@ -14,9 +14,7 @@ services:
     # Note: Environment variable values from databases work fine here
     envVars:
       - key: SPRING_DATASOURCE_URL
-        fromDatabase:
-          name: shortify-db
-          property: connectionString
+        value: jdbc:postgresql://shortify-db:5432/shortify
       - key: SPRING_DATASOURCE_USERNAME
         fromDatabase:
           name: shortify-db
